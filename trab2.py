@@ -1,5 +1,7 @@
 import sys 
 import argparse
+import time
+
 
 opt_x = ""
 opt_p = sys.maxsize
@@ -7,8 +9,6 @@ cont_nodes = 0
 def generate_combinations(bits, current, x, l, current_set, array):
     
     if len(current_set) == l:
-        print("------------------------finded a solution-----------------------------")
-        print("formed sequence", current)
         len_current_set = current.count('1');
         global opt_x
         global opt_p
@@ -19,8 +19,6 @@ def generate_combinations(bits, current, x, l, current_set, array):
         return
 
     if len(current) == x:
-        print("formed sequence", current)
-        print("formed sequence current_set", current_set)
         return
 
     b = 0  
@@ -37,9 +35,6 @@ def generate_combinations(bits, current, x, l, current_set, array):
             current_set = list(set(current_set + array[len(current)])) 
         
         len_current_set_after = len(current_set)
-        print("current ", current)
-        print("current set ", current_set)
-        print("opt_p \n ", opt_p)
 
         generate_bit1_branch = True 
         if (not(args.f)): 
@@ -96,7 +91,6 @@ def bounding_function(array, current, current_set,l):
 
     candidates_left_with_groups_filtered.sort(key=len, reverse=True)
     
-    print("candidates left with gropus filtered", candidates_left_with_groups_filtered)
 
     cont_unique_groups = 0
     cont_necessary_candidates = 0
@@ -107,7 +101,6 @@ def bounding_function(array, current, current_set,l):
         if cont_unique_groups >= groups_left:
            break
 
-    print("cont necessary candidates-------------------------------------", cont_necessary_candidates)
     
     return cont_necessary_candidates
 
@@ -129,11 +122,6 @@ for i in range(n):
     array[i] = nums[1:]
 
 
-print(l,n)
-for i in range(n):
-    print(array[i])
-
-
 # Definindo os bits e o comprimento desejado
 bits = "01"
 x = n
@@ -152,12 +140,18 @@ args = parser.parse_args()
 
 
 # Chamando a função recursiva
-stdout = generate_combinations(bits, "", x,l,current_set,array)
+tempo = 0
+tempo_inicial = time.time()
+stdout = generate_combinations(bits, "", x,l,current_set,array) 
+tempo_final = time.time()
+tempo += tempo_final - tempo_inicial 
 
 
-print("result recursão stdout \n ", stdout)
-print("opt_p: ", opt_p)
-print("opt_x: ", opt_x)
+print(f"{tempo} segundos")
+print("cont nos ", cont_nodes);
+#print("result recursão stdout \n ", stdout)
+#print("opt_p: ", opt_p)
+#print("opt_x: ", opt_x)
 
 if (opt_x == ""):
     print("Inviavel")
@@ -166,7 +160,5 @@ else:
         if opt_x[i] == '1':
             print(i+1, end=" ");
 
-print("cont nos ", cont_nodes);
-
-
+print("")
 
